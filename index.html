@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="MaClass iOS" />
+  <meta name="theme-color" content="#0A66C2" />
+  <link rel="manifest" href="manifest.json" />
+  <title>MaClass iOS</title>
+  <style>
+    :root {
+      --primary: #0A66C2;
+      --primary-dark: #084E96;
+      --bg: #F4F7FB;
+      --card: #FFFFFF;
+      --text: #111827;
+      --muted: #6B7280;
+      --border: #E5E7EB;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: var(--bg); color: var(--text); padding-bottom: 85px; }
+    header {
+      background: var(--card);
+      padding: 16px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; z-index: 10;
+    }
+    .brand small { color: var(--muted); font-size: 12px; display: block; }
+    .brand h1 { color: var(--primary); font-size: 20px; font-weight: 800; }
+    .lang-switch { display: flex; gap: 6px; }
+    .lang-btn {
+      border: 1px solid var(--border);
+      background: var(--bg);
+      padding: 5px 9px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .lang-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .container { padding: 16px; max-width: 540px; margin: auto; }
+    .hero {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: #fff;
+      border-radius: 18px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .hero h2 { font-size: 20px; margin-bottom: 6px; }
+    .hero p { font-size: 13px; opacity: 0.92; margin-bottom: 14px; }
+    .hero button {
+      background: #fff; color: var(--primary);
+      border: none; border-radius: 12px;
+      padding: 10px 18px; font-weight: 700; font-size: 14px; width: 100%; cursor: pointer;
+    }
+    .section-title { font-size: 16px; font-weight: 700; margin: 14px 0 10px; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: 0.15s;
+    }
+    .card:active { transform: scale(0.98); border-color: var(--primary); }
+    .card .icon { font-size: 24px; margin-bottom: 8px; display: block; }
+    .card h3 { font-size: 15px; margin-bottom: 4px; }
+    .card span { font-size: 12px; color: var(--muted); }
+    .screen { display: none; }
+    .screen.active { display: block; }
+    .list-item {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 14px; padding: 14px; margin-bottom: 10px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .badge {
+      background: #E0EFFF; color: var(--primary);
+      padding: 5px 10px; border-radius: 8px; font-size: 12px; font-weight: 700; border: none; cursor: pointer;
+    }
+    .qcm-opt {
+      display: block; width: 100%; text-align: inherit;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 12px; margin-top: 8px; cursor: pointer; font-size: 14px;
+    }
+    .qcm-opt.correct { background: #DCFCE7; border-color: #16A34A; color: #166534; font-weight: 700; }
+    .qcm-opt.wrong { background: #FEE2E2; border-color: #DC2626; color: #991B1B; }
+    nav {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: var(--card); border-top: 1px solid var(--border);
+      display: flex; justify-content: space-around; padding: 8px 0 18px;
+    }
+    nav button {
+      background: none; border: none; color: var(--muted);
+      font-size: 11px; display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer;
+    }
+    nav button.active { color: var(--primary); font-weight: 700; }
+    nav button span { font-size: 19px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <small id="t-welcome">مرحباً بك في</small>
+    <h1>MaClass iOS</h1>
+  </div>
+  <div class="lang-switch">
+    <button class="lang-btn active" onclick="setLang('ar', this)">عربي</button>
+    <button class="lang-btn" onclick="setLang('fr', this)">FR</button>
+    <button class="lang-btn" onclick="setLang('en', this)">EN</button>
+  </div>
+</header>
+
+<div class="container">
+  <!-- الرئيسية -->
+  <section id="tab-home" class="screen active">
+    <div class="hero">
+      <h2 id="t-hero-title">مستقبلك يبدأ من هنا!</h2>
+      <p id="t-hero-sub">تعلم، تدرب، وحقق أهدافك الدراسية في جميع المستويات بالمغرب.</p>
+      <button id="t-explore" onclick="switchTab('learn')">اكتشف الدروس</button>
+    </div>
+
+    <div class="section-title" id="t-levels-title">اختر مستواك الدراسي</div>
+    <div class="grid">
+      <div class="card" onclick="selectLevel('الابتدائي (1-6)')">
+        <span class="icon">✏️</span>
+        <h3 id="t-lvl-1">الابتدائي</h3>
+        <span id="t-lvl-1s">المستويات 1–6</span>
+      </div>
+      <div class="card" onclick="selectLevel('الإعدادي (1-3)')">
+        <span class="icon">📖</span>
+        <h3 id="t-lvl-2">الإعدادي</h3>
+        <span id="t-lvl-2s">الأولى – الثالثة</span>
+      </div>
+      <div class="card" onclick="selectLevel('الجذع المشترك')">
+        <span class="icon">🎓</span>
+        <h3 id="t-lvl-3">الثانوي</h3>
+        <span id="t-lvl-3s">الجذع المشترك</span>
+      </div>
+      <div class="card" onclick="selectLevel('البكالوريا (1 و 2)')">
+        <span class="icon">🏅</span>
+        <h3 id="t-lvl-4">البكالوريا</h3>
+        <span id="t-lvl-4s">الأولى والثانية</span>
+      </div>
+    </div>
+
+    <div class="section-title" id="t-sections-title">أقسام التعلم</div>
+    <div class="grid">
+      <div class="card" onclick="switchTab('learn')"><span class="icon">📘</span><h3 id="t-sec-1">الدروس</h3></div>
+      <div class="card" onclick="switchTab('learn')"><span class="icon">📄</span><h3 id="t-sec-2">الملخصات</h3></div>
+      <div class="card" onclick="switchTab('learn')"><span class="icon">✅</span><h3 id="t-sec-3">التمارين</h3></div>
+      <div class="card" onclick="switchTab('learn')"><span class="icon">🏆</span><h3 id="t-sec-4">الامتحانات</h3></div>
+    </div>
+  </section>
+
+  <!-- التعلم -->
+  <section id="tab-learn" class="screen">
+    <div class="section-title" id="selected-level-banner">المستوى: البكالوريا (2 باك علوم فيزيائية)</div>
+    <div class="list-item">
+      <div><strong>الرياضيات: النهايات والاتصال</strong><br><small style="color:var(--muted)">درس + ملخص PDF جاهز</small></div>
+      <button class="badge" onclick="saveOffline('الرياضيات: النهايات والاتصال')">حفظ أوفلاين</button>
+    </div>
+    <div class="list-item">
+      <div><strong>الفيزياء: الموجات الميكانيكية</strong><br><small style="color:var(--muted)">ملخص شامل + تمارين محلولة</small></div>
+      <button class="badge" onclick="saveOffline('الفيزياء: الموجات الميكانيكية')">حفظ أوفلاين</button>
+    </div>
+    <div class="list-item">
+      <div><strong>الفلسفة: الشخص والهوية</strong><br><small style="color:var(--muted)">مجزوءة الوضع البشري</small></div>
+      <button class="badge" onclick="saveOffline('الفلسفة: الشخص والهوية')">حفظ أوفلاين</button>
+    </div>
+
+    <div class="section-title">اختبار تفاعلي سريع (QCM)</div>
+    <div class="card" style="text-align:inherit">
+      <p style="font-weight:700; margin-bottom:8px;">ما هي وحدة قياس التردد في النظام العالمي؟</p>
+      <button class="qcm-opt" onclick="checkQcm(this, false)">المتر (m)</button>
+      <button class="qcm-opt" onclick="checkQcm(this, true)">الهرتز (Hz)</button>
+      <button class="qcm-opt" onclick="checkQcm(this, false)">الثانية (s)</button>
+    </div>
+  </section>
+
+  <!-- تحميلاتي -->
+  <section id="tab-offline" class="screen">
+    <div class="section-title" id="t-off-title">الدروس المحفوظة بدون إنترنت</div>
+    <div id="offline-list"><p style="color:var(--muted); font-size:14px;">لا توجد دروس محفوظة بعد. اضغط على "حفظ أوفلاين" في قسم التعلم.</p></div>
+  </section>
+
+  <!-- حسابي -->
+  <section id="tab-profile" class="screen">
+    <div class="section-title" id="t-prof-title">حسابي وتقدمي الدراسي</div>
+    <div class="card" style="text-align:inherit">
+      <p><strong>تلميذ MaClass iOS</strong></p>
+      <p style="color:var(--muted); font-size:13px; margin-top:6px;">الحالة: نسخة أولية MVP (تعمل دون إنترنت)</p>
+      <p style="color:var(--primary); font-weight:700; margin-top:10px;">الإنجاز الحالي: 1 / 3 دروس مكتملة</p>
+    </div>
+  </section>
+</div>
+
+<nav>
+  <button id="nav-home" class="active" onclick="switchTab('home')"><span>🏠</span><div id="t-nav-1">الرئيسية</div></button>
+  <button id="nav-learn" onclick="switchTab('learn')"><span>📚</span><div id="t-nav-2">التعلم</div></button>
+  <button id="nav-offline" onclick="switchTab('offline')"><span>⬇️</span><div id="t-nav-3">تحميلاتي</div></button>
+  <button id="nav-profile" onclick="switchTab('profile')"><span>👤</span><div id="t-nav-4">حسابي</div></button>
+</nav>
+
+<script>
+  const i18n = {
+    ar: { dir: 'rtl', welcome: 'مرحباً بك في', heroTitle: 'مستقبلك يبدأ من هنا!', heroSub: 'تعلم، تدرب، وحقق أهدافك الدراسية.', explore: 'اكتشف الدروس', levels: 'اختر مستواك الدراسي', sections: 'أقسام التعلم', nav1: 'الرئيسية', nav2: 'التعلم', nav3: 'تحميلاتي', nav4: 'حسابي' },
+    fr: { dir: 'ltr', welcome: 'Bienvenue sur', heroTitle: 'Votre avenir commence ici !', heroSub: 'Apprenez, révisez et réussissez vos études au Maroc.', explore: 'Explorer les cours', levels: 'Choisissez votre niveau', sections: 'Sections d’apprentissage', nav1: 'Accueil', nav2: 'Cours', nav3: 'Hors-ligne', nav4: 'Profil' },
+    en: { dir: 'ltr', welcome: 'Welcome to', heroTitle: 'Your future starts here!', heroSub: 'Learn, practice, and achieve your study goals.', explore: 'Explore Lessons', levels: 'Choose your level', sections: 'Learning Sections', nav1: 'Home', nav2: 'Learn', nav3: 'Downloads', nav4: 'Profile' }
+  };
+
+  function setLang(lang, btn) {
+    const t = i18n[lang];
+    document.documentElement.lang = lang;
+    document.documentElement.dir = t.dir;
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('t-welcome').textContent = t.welcome;
+    document.getElementById('t-hero-title').textContent = t.heroTitle;
+    document.getElementById('t-hero-sub').textContent = t.heroSub;
+    document.getElementById('t-explore').textContent = t.explore;
+    document.getElementById('t-levels-title').textContent = t.levels;
+    document.getElementById('t-sections-title').textContent = t.sections;
+    document.getElementById('t-nav-1').textContent = t.nav1;
+    document.getElementById('t-nav-2').textContent = t.nav2;
+    document.getElementById('t-nav-3').textContent = t.nav3;
+    document.getElementById('t-nav-4').textContent = t.nav4;
+  }
+
+  function switchTab(tab) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + tab).classList.add('active');
+    document.getElementById('nav-' + tab).classList.add('active');
+  }
+
+  function selectLevel(lvl) {
+    document.getElementById('selected-level-banner').textContent = 'المستوى المختار: ' + lvl;
+    switchTab('learn');
+  }
+
+  function checkQcm(btn, isCorrect) {
+    btn.classList.add(isCorrect ? 'correct' : 'wrong');
+  }
+
+  function saveOffline(title) {
+    let saved = JSON.parse(localStorage.getItem('maclass_saved') || '[]');
+    if (!saved.includes(title)) saved.push(title);
+    localStorage.setItem('maclass_saved', JSON.stringify(saved));
+    renderOffline();
+    alert('تم حفظ الدرس للعمل دون إنترنت!');
+  }
+
+  function renderOffline() {
+    const saved = JSON.parse(localStorage.getItem('maclass_saved') || '[]');
+    const box = document.getElementById('offline-list');
+    if (!saved.length) return;
+    box.innerHTML = saved.map(item => `<div class="list-item"><strong>${item}</strong><span class="badge">متاح أوفلاين</span></div>`).join('');
+  }
+  renderOffline();
+
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  }
+</script>
+</body>
+</html>
